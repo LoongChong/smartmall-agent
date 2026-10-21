@@ -1,0 +1,116 @@
+{
+  "environment": {
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "python": "3.11.16",
+    "embedding_provider": "hash",
+    "chunk_size": 320,
+    "rrf_k": 60
+  },
+  "note": "知识库仅 6 篇文档，K=4 时所有模式 Recall 均为 1.0（天花板效应），区分度体现在 K=1/2 的 Recall 与各 K 的 Precision 上。embedding_provider=hash 是词面哈希向量，非语义向量。",
+  "results": {
+    "k=1": {
+      "vector": {
+        "recall": 0.9583,
+        "mrr": 1.0,
+        "precision": 1.0,
+        "p50_ms": 0.58
+      },
+      "bm25": {
+        "recall": 0.875,
+        "mrr": 0.9167,
+        "precision": 0.9167,
+        "p50_ms": 0.03
+      },
+      "hybrid": {
+        "recall": 0.9583,
+        "mrr": 1.0,
+        "precision": 1.0,
+        "p50_ms": 0.59
+      },
+      "hybrid_rerank": {
+        "recall": 0.875,
+        "mrr": 0.9167,
+        "precision": 0.9167,
+        "p50_ms": 1.6
+      }
+    },
+    "k=2": {
+      "vector": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "precision": 0.75,
+        "p50_ms": 0.53
+      },
+      "bm25": {
+        "recall": 1.0,
+        "mrr": 0.9583,
+        "precision": 0.8333,
+        "p50_ms": 0.02
+      },
+      "hybrid": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "precision": 0.7917,
+        "p50_ms": 0.57
+      },
+      "hybrid_rerank": {
+        "recall": 1.0,
+        "mrr": 0.9583,
+        "precision": 0.9167,
+        "p50_ms": 1.6
+      }
+    },
+    "k=3": {
+      "vector": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "precision": 0.6944,
+        "p50_ms": 0.53
+      },
+      "bm25": {
+        "recall": 1.0,
+        "mrr": 0.9583,
+        "precision": 0.7222,
+        "p50_ms": 0.02
+      },
+      "hybrid": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "precision": 0.6806,
+        "p50_ms": 0.58
+      },
+      "hybrid_rerank": {
+        "recall": 1.0,
+        "mrr": 0.9583,
+        "precision": 0.7917,
+        "p50_ms": 1.53
+      }
+    },
+    "k=4": {
+      "vector": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "precision": 0.5069,
+        "p50_ms": 0.55
+      },
+      "bm25": {
+        "recall": 1.0,
+        "mrr": 0.9583,
+        "precision": 0.7083,
+        "p50_ms": 0.02
+      },
+      "hybrid": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "precision": 0.625,
+        "p50_ms": 0.57
+      },
+      "hybrid_rerank": {
+        "recall": 1.0,
+        "mrr": 0.9583,
+        "precision": 0.7639,
+        "p50_ms": 1.57
+      }
+    }
+  }
+}

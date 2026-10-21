@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.12.10"
+
+      - name: Set up Python 3.11
+        run: uv python install 3.11
+
+      - name: Install dependencies
+        run: uv sync --extra dev || uv pip install --system -e ".[dev]"
+
+      - name: Ruff lint
+        run: uv run ruff check .
+
+      - name: Ruff format check
+        run: uv run ruff format --check . || true   # 格式化仅提示，不阻塞
+
+      - name: Pytest (mock 模式，不需要任何 API Key)
+        env:
+          SMA_LLM_PROVIDER: mock
+          SMA_EMBEDDING_PROVIDER: hash
+        run: uv run pytest --cov=sma --cov-report=term-missing
+
+      - name: Smoke - 知识库构建 + 问答端到端
+        env:
+          SMA_LLM_PROVIDER: mock
+          SMA_DB_PATH: data/ci.db
+          SMA_CHROMA_DIR: data/ci-chroma
+        run: uv run sma index && uv run sma ask "7 天无理由退货从什么时候开始算"
+
+      - name: 评测集回归（输出真实指标）
+        env:
+          SMA_LLM_PROVIDER: mock
+          SMA_EMBEDDING_PROVIDER: hash
+          SMA_DB_PATH: data/eval.db
+          SMA_CHROMA_DIR: data/eval-chroma
+        run: uv run sma eval
+
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t smartmall-agent:ci .
+      - name: Run container health check
+        run: |
+          docker run -d --name sma -p 8000:8000 smartmall-agent:ci
+          for i in $(seq 1 30); do
+            if curl -fs http://127.0.0.1:8000/health; then echo "healthy"; exit 0; fi
+            sleep 2
+          done
+          docker logs sma
+          exit 1

@@ -1,0 +1,21 @@
+services:
+  sma:
+    build: .
+    image: smartmall-agent:0.1.0
+    ports:
+      - "8000:8000"
+    environment:
+      # 默认 mock + hash：开箱即用，不需要任何密钥
+      SMA_LLM_PROVIDER: ${SMA_LLM_PROVIDER:-mock}
+      SMA_LLM_API_KEY: ${SMA_LLM_API_KEY:-}
+      SMA_EMBEDDING_PROVIDER: ${SMA_EMBEDDING_PROVIDER:-hash}
+      SMA_EMBEDDING_API_KEY: ${SMA_EMBEDDING_API_KEY:-}
+      SMA_RETRIEVAL_MODE: ${SMA_RETRIEVAL_MODE:-hybrid}
+      SMA_API_ADMIN_TOKEN: ${SMA_API_ADMIN_TOKEN:-}
+      SMA_LOG_JSON: "true"
+    volumes:
+      - sma-data:/data
+    restart: unless-stopped
+
+volumes:
+  sma-data:

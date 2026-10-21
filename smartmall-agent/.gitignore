@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# 环境变量与密钥（严禁提交）
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# 数据与日志
+data/
+*.db
+*.db-wal
+*.db-shm
+logs/
+*.log
+
+# 测试与缓存
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# 编辑器 / 系统
+.idea/
+.vscode/
+.DS_Store
+
+# 向量库
+data/chroma/
